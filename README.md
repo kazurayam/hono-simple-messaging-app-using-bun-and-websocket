@@ -1,15 +1,4 @@
-# frontend
+# [Hono] Simple Messaging App Using Bun and WebSocket
 
-To install dependencies:
-
-```bash
-bun install
-```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.3.14. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+https://dev.to/yutakusuno/hono-simple-messaging-app-using-bun-and-websocket-mnk by Yuta Kusuno
+>>>>>>> 2056b77ec6a9f8cab2a42d03c0e062d719e2144e
