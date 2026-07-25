@@ -30,9 +30,6 @@ const topic = 'anonymous-chat-room';
 const messages: Message[] = [];
 
 const messagesRoute = app
-    .get('/', (c) => {
-        return c.json(messages);
-    })
     .get('/messages', (c) => {
         return c.json(messages);
     })
