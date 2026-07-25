@@ -30,6 +30,9 @@ const topic = 'anonymous-chat-room';
 const messages: Message[] = [];
 
 const messagesRoute = app
+    .get('/', (c) => {
+        return c.json(messages);
+    })
     .get('/messages', (c) => {
         return c.json(messages);
     })
@@ -69,7 +72,7 @@ const messagesRoute = app
 
         const data: DataToSend = {
             action: publishActions.DELETE_CHAT,
-            message: messages[index],
+            message: messages[index]!,
         }
 
         messages.splice(index, 1);

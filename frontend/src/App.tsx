@@ -1,6 +1,6 @@
 // frontend/App.tsx
 import { useEffect, useState } from 'react';
-import type { ChangeEvent, FormEvent } from 'react';
+import type { ChangeEvent, SubmitEvent } from 'react';
 import { z } from 'zod';
 import { hc } from 'hono/client';
 
@@ -9,13 +9,13 @@ import {
     MessageFormSchema,
     type MessageFormValues,
     type DataToSend,
-} from '@shared/types';
+} from '../../shared/types.ts';
 
 import {
     BACKEND_DEV_WS_URL,
     BACKEND_DEV_URL,
     publishActions,
-} from '@shared/constants';
+} from '../../shared/constants.ts';
 
 import type { AppType } from '@server/index';
 import './App.css';
@@ -91,7 +91,7 @@ function App() {
         }));
     };
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
             const validatedValues = MessageFormSchema.parse(formValues);
@@ -131,7 +131,7 @@ function App() {
         <div className="container mx-auto max-w-lg bg-gray-900 text-white">
             <div className="flex flex-col h-screen">
                 <div className="overflow-auto mb-4 flex-grow">
-                    {messages.map((message) => {
+                    {messages.map((message) => (
                         <div
                             key={message.id}
                             className="p-2 border border-gray-800 rounded-md"
@@ -139,7 +139,7 @@ function App() {
                             <div className="flex justify-between">
                                 <strong className="text-left">{message.userId}</strong>
                                 <span className="text-right text-gray-500 text-sm">
-                                    { message.date}
+                                    {message.date}
                                 </span>
                                 <button
                                     onClick={() => handleDelete(message.id)}
@@ -150,7 +150,7 @@ function App() {
                             </div>
                             <div>{message.text}</div>
                         </div>
-                    })}
+                    ))}
                 </div>
                 <div className="flex-none px-2 py-5">
                     <form
