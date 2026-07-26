@@ -17,7 +17,9 @@ const app = new Hono();
 app.use('*', cors({ origin: FRONTEND_DEV_URL }));
 export default app;
 
-// start a Publish-Subscribe server
+/*
+ 1.3 start a Publish-Subscribe server
+ */
 const server = Bun.serve({
     fetch: app.fetch,
     port: BACKEND_DEV_URL.split(':')[2],

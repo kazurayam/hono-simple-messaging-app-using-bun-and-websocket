@@ -1,6 +1,11 @@
 # [Hono] Simple Messaging App Using Bun and WebSocket
 
-https://dev.to/yutakusuno/hono-simple-messaging-app-using-bun-and-websocket-mnk by Yuta Kusuno
+[[Hono] Simple Messaging App Using Bun and WebSocket](https://dev.to/yutakusuno/hono-simple-messaging-app-using-bun-and-websocket-mnk) by Yuta Kusuno を写経する。
+
+>We often see implementations of WebSocket using the Express framework and Socket.io. However, there seem to be fewer examples of WebSocket implementations using Hono, a framework that is similar to Express but faster and lighter. In this article, I will introduce the implementation of a simple messaging app using Hono and Bun, a JavaScript runtime.
+> ExpressとSocket.ioを使ったWebSocketの実装ならよく見かける。しかしHonoを使ったWebSocketの実装例は少ない。この記事ではHonoとBunを使ってシンプルなメッセージングAppを作ったのを紹介したい。
+
+特にこの記事のサーバー・サイドの実装を参考にしようと思う。この記事はクライアントをReactで実装しているが、わたしは同じ箇所をhtmxのWebSocket拡張で置換できるだろうと考えている。その企みは後日別のプロジェクトでやるつもり。
 
 ## How to run the demonstration
 
@@ -47,14 +52,50 @@ Open another browser, navigte to `http://localhost:5173` as well.
 
 ![frontends_chatting](https://kazurayam.github.io/hono-simple-messaging-app-using-bun-and-websocket/images/001_frontends_chatting.png)
 
-### you can see the messages recorded on the server
 
-Open a browser, navigate to `http://locahost:3000/messages`. Then you will see the list of messages exchanged by the frontends.
 
-![frontends_chatting](https://kazurayam.github.io/hono-simple-messaging-app-using-bun-and-websocket/images/002_messages_retrieved.png)
+## 構成要素
+
+- テスターX
+- Chromeブラウザ
+- React App: テスターXがChromeブラウザでfrontendサーバ(http://localhost:5173)にアクセスしてロードされたWebページがReactアプリを実行する。このReactアプリがクライアントとなってserver(http://localhost:3000)とWebSocketで常時接続する。
+- テスターY
+- Firefoxブラウザ
+- React App: テスターXがChromeブラウザで起動したReact Appと全く同一。
+- 管理者: テスターXがfrontment(http://localhost:5173)にアクセスする前にあらかじめ誰かがfrontendを起動しておく。server(http://localhost:3000)も。コマンドラインで適切なディレクトリにcdした上で `bun run dev` コマンドを投入する。
+- server: メッセージング・サーバー
+- WebSocket Handler: serverを構成する部品。Bunが提供するものを利用。
+- frontend: Chat画面を提供するWebサーバ
 
 ## Sequence diagram
 
 ![sequence](https://kazurayam.github.io/hono-simple-messaging-app-using-bun-and-websocket/diagrams/out/sequence/sequence.png)
 
+### 1 管理者がサーバーを起動する
 
+#### 1.1 start frontend
+
+```
+$ cd $ROOT/frontend
+$ bun run dev
+```
+
+See the code:
+
+- [frontend/package.json](https://github.com/kazurayam/hono-simple-messaging-app-using-bun-and-websocket/blob/master/frontend/package.json)
+
+#### 1.2 start server
+
+```
+$ cd $ROOT
+$ bun run dev
+```
+
+See the code
+- [$ROOT/package.json](https://github.com/kazurayam/hono-simple-messaging-app-using-bun-and-websocket/blob/master/package.json)
+
+#### the frontend starts the WebSocket Handler
+
+See the code
+
+- [server/index.ts line#23](https://github.com/kazurayam/hono-simple-messaging-app-using-bun-and-websocket/blob/master/server/index.ts)
