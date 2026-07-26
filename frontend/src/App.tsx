@@ -42,29 +42,29 @@ function App() {
             const messages: Message[] = await response.json();
             setMessages(messages);
         };
-
         fetchMessages();
     }, []);
 
     useEffect(() => {
         const socket = new WebSocket('ws://localhost:3000/ws');
-
         socket.onopen = (event) => {
             console.log('WebSocket client opened', event);
         }
-
         socket.onmessage = (event) => {
             try {
                 const data: DataToSend = JSON.parse(event.data.toString());
+                const messageDescription = `{id:"${data.message.id}",date:"${data.message.date}"}`
                 switch (data.action) {
                     case publishActions.UPDATE_CHAT:
                         setMessages((prev) =>
                             [...prev, data.message]);
+                        console.log(`UPDATE_CHAT: ${messageDescription}`)
                         break;
                     case publishActions.DELETE_CHAT:
                         setMessages((prev) =>
                             prev.filter((message) => message.id !== data.message.id)
                         );
+                        console.log(`DELETE_CHAT: ${messageDescription}`)
                         break;
                     default:
                         console.error('Unknown data:', data);
@@ -73,11 +73,9 @@ function App() {
                 console.log('Message from server:', event.data);
             }
         };
-
         socket.onclose = (event) => {
             console.log('WebSocket client closed', event);
         };
-
         return () => {
             socket.close();
         };

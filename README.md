@@ -53,3 +53,8 @@ Open a browser, navigate to `http://locahost:3000/messages`. Then you will see t
 
 ![frontends_chatting](https://kazurayam.github.io/hono-simple-messaging-app-using-bun-and-websocket/images/002_messages_retrieved.png)
 
+## Sequence diagram
+
+![sequence](https://kazurayam.github.io/hono-simple-messaging-app-using-bun-and-websocket/diagrams/out/sequence/sequence.png)
+
+
