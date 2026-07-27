@@ -23,7 +23,7 @@ export default app;
 const server = Bun.serve({
     fetch: app.fetch,
     port: BACKEND_DEV_URL.split(':')[2],
-    websocket,
+    websocket
 });
 
 const topic = 'anonymous-chat-room';
@@ -77,14 +77,17 @@ app.get(
     upgradeWebSocket((_) => ({
         onOpen(_, ws) {
             const rawWs = ws.raw as ServerWebSocket;
+            /*
+             1.4
+             */
             rawWs.subscribe(topic);
-            console.log(`WebSocket server opened and subscribed to topic '${topic}'`);
+            console.log(`WebSocket connection opened and subscribed to topic '${topic}'`);
         },
         onClose(_, ws) {
             const rawWs = ws.raw as ServerWebSocket;
             rawWs.unsubscribe(topic);
             console.log(
-                `WebSocket server closed and unsubscribed from topic '${topic}'`
+                `WebSocket connection closed`
             );
         },
     }))

@@ -71,7 +71,7 @@ Open another browser, navigte to `http://localhost:5173` as well.
 
 ![sequence](https://kazurayam.github.io/hono-simple-messaging-app-using-bun-and-websocket/diagrams/out/sequence/sequence.png)
 
-### 1 管理者がサーバーを起動する
+### 1 サーバーを起動する
 
 #### 1.1 start frontend
 
@@ -94,8 +94,27 @@ $ bun run dev
 See the code
 - [$ROOT/package.json](https://github.com/kazurayam/hono-simple-messaging-app-using-bun-and-websocket/blob/master/package.json)
 
-#### the frontend starts the WebSocket Handler
+#### 1.3 the server starts the WebSocket Handler
+
+serverは起動時に一度だけ `const server = Bun.serve(fetch:app.fetch,port:3000,websocket)` を実行する。これによってHTTPサーバが立ち上がる。このサーバはWebSocketsもサポートする。[ドキュメント](https://bun.com/docs/runtime/http/websockets)を参照。
 
 See the code
 
 - [server/index.ts line#23](https://github.com/kazurayam/hono-simple-messaging-app-using-bun-and-websocket/blob/master/server/index.ts)
+
+#### 1.4 subscribe to the topic
+
+`Bun.serve(fetch:app.fetch,3000,websocket)`起動されたサーバはpublish-subscribe APIもサポートしている。Publish-Subscribeパターンについての解説として[](https://ja.wikipedia.org/wiki/%E5%87%BA%E7%89%88-%E8%B3%BC%E8%AA%AD%E5%9E%8B%E3%83%A2%E3%83%87%E3%83%AB)を参照。
+
+クライアント(ブラウザ上のForm画面)が `http://localhost:3000/ws` にHTTP GET要求を投げると、serverはそのHTTP要求を捉えてWebSocketにupgradeし、クライアントとサーバの間に永続的なコネクションを確立する。同時にseverはトピック（名前付きの論理的なチャネル）にたいし `server.subscribe(トピック)` する。この例でトピックは "anonyous-chat-room" という名前を持つ。トピックにsubscribeする
+
+
+## Conclusion
+
+オリジナルの記事を写して手元で動作させることはできた。しかしWebSocketクライアントとPub/Subサーバがどのように連携動作するのか基本的なことが見えてこなかった。このサンプルコードでは基本を学ぶことができない。
+
+別の記事を見つけた。
+
+- https://oneuptime.com/blog/post/2026-01-31-bun-websocket-servers/view
+
+Honoを抜きにしてBun.serve()のWebSocket APIを直に使ってサーバを構築する基本を学ぶことができそう。これに目を移そう。

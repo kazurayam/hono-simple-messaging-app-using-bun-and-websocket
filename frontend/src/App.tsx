@@ -1,6 +1,5 @@
 // frontend/App.tsx
-import { useEffect, useState } from 'react';
-import type { ChangeEvent, SubmitEvent } from 'react';
+import { useEffect, useState, type ChangeEvent, type SubmitEvent } from 'react';
 import { z } from 'zod';
 import { hc } from 'hono/client';
 
@@ -46,7 +45,8 @@ function App() {
     }, []);
 
     useEffect(() => {
-        const socket = new WebSocket('ws://localhost:3000/ws');
+        const socket = new WebSocket(`${BACKEND_DEV_URL}/ws`);
+        console.log(`socket.url: ${socket.url}`)
         socket.onopen = (event) => {
             console.log('WebSocket client opened', event);
         }
@@ -56,8 +56,7 @@ function App() {
                 const messageDescription = `{id:"${data.message.id}",date:"${data.message.date}"}`
                 switch (data.action) {
                     case publishActions.UPDATE_CHAT:
-                        setMessages((prev) =>
-                            [...prev, data.message]);
+                        setMessages((prev) => [...prev, data.message]);
                         console.log(`UPDATE_CHAT: ${messageDescription}`)
                         break;
                     case publishActions.DELETE_CHAT:
